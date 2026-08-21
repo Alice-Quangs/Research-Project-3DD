@@ -1,14 +1,17 @@
 # %%
+
 import os
+import json
 import math
 import numpy as np
 from bin_types import bin_types
-from bed_loader import load_bed_sequence
-from visualiser import visualise_result
-
+# Note: visualise_result is imported further down, INSIDE run_ep_method, and
+# only when visualize=True is actually requested. That way, just importing
+# this file (e.g. from ha3_nn.py) never requires visualiser.py to exist.
 
 
 # %%
+
 class Bin:
     """
     Represents a bin's dimensions and its available Extreme Points (EP)
@@ -30,6 +33,7 @@ class Bin:
         return f"Bin({self.name}, EPs: {len(self.ep_list)}, Items: {len(self.placed_items)})"
 
 # %%
+
 def update_ep(ep_list, item_x, item_y, item_z, ol, ow, oh, placed_items, bin_l, bin_w, bin_h):
     """
     Updates the list of Extreme Points after placing an item.
@@ -69,6 +73,7 @@ def update_ep(ep_list, item_x, item_y, item_z, ol, ow, oh, placed_items, bin_l, 
     return ep_list
 
 # %%
+
 def all_orientations(l, w, h):
     """
     Returns all 6 different possible orientations of an item with dimensions l, w, h
@@ -84,6 +89,7 @@ def all_orientations(l, w, h):
     return list(set(orientations))
 
 # %%
+
 def can_place(ep_x, ep_y, ep_z, ol, ow, oh, bin_l, bin_w, bin_h, placed_items):
     """
     Checks if an item of dimension (ol, ow, oh) can be placed at point (ep_x, ep_y, ep_z)
@@ -104,6 +110,7 @@ def can_place(ep_x, ep_y, ep_z, ol, ow, oh, bin_l, bin_w, bin_h, placed_items):
     return True
 
 # %%
+
 def best_orientation(valid_orientations_list):
     """
     Returns the best orientation that maximises the base area,
@@ -124,6 +131,7 @@ def best_orientation(valid_orientations_list):
     return final_orient[0]
 
 # %%
+
 def pack_item(bin_types, open_bins, item_l, item_w, item_h):
     """
     Packs an item into the first open bin that fits using Extreme Points.
@@ -175,6 +183,7 @@ def pack_item(bin_types, open_bins, item_l, item_w, item_h):
     return None
 
 # %%
+
 def run_ep_method(sequence, bin_types, visualize=True, save_path="ep_result.png"):
     """
     Runs the Extreme Points packing logic on a given sequence of items.
@@ -193,6 +202,7 @@ def run_ep_method(sequence, bin_types, visualize=True, save_path="ep_result.png"
     num_bins_used = len(open_bins)
 
     if visualize:
+        from visualiser import visualise_result  # only needed here, only when actually visualizing
         print_bin_summary(open_bins, items_processed)
         if open_bins:
             print_items_in_bin(open_bins[0], 1)
@@ -201,6 +211,7 @@ def run_ep_method(sequence, bin_types, visualize=True, save_path="ep_result.png"
     return open_bins, num_bins_used, total_cost
 
 # %%
+
 def print_bin_summary(open_bins, sequence_length=None):
     # (Kept identical to your original code)
     print("\n" + "=" * 70)
@@ -251,6 +262,7 @@ def print_bin_summary(open_bins, sequence_length=None):
     print("=" * 70)
 
 # %%
+
 def print_items_in_bin(bin_obj, bin_number=None):
     # (Kept identical to your original code)
     if bin_number is None:
@@ -272,12 +284,30 @@ def print_items_in_bin(bin_obj, bin_number=None):
     print("   " + "-" * 55)
 
 # %%
+
 if __name__ == "__main__":
     os.makedirs("Visuals", exist_ok=True)
-    
-    sequence = load_bed_sequence("bed-bpp_v1.json", order_index=0)
-    
+
+    # Load one order (order_index=0, i.e. the first one) straight from the
+    # raw JSON dataset - no separate loader file needed.
+    with open("../dataset/bed-bpp_v1.json", "r") as f:
+        bed_bpp_data = json.load(f)
+
+    first_order_id = list(bed_bpp_data.keys())[0]
+    order = bed_bpp_data[first_order_id]
+
+    sequence = []
+    for key in sorted(order["item_sequence"].keys(), key=lambda x: int(x)):
+        item = order["item_sequence"][key]
+        sequence.append({
+            "length": item["length/mm"],
+            "width": item["width/mm"],
+            "height": item["height/mm"],
+        })
+
     open_bins, num_bins, total_cost = run_ep_method(sequence, bin_types, save_path="Visuals/ha3_visualisation.png")
     
     print(f"Bins used: {num_bins}")
     print(f"Total cost: {total_cost}")
+
+# %%

@@ -1,11 +1,12 @@
-
 # %%
 import os
+import json
 import math
 import numpy as np
 from bin_types import bin_types, Bin
-from bed_loader import load_bed_sequence
-from visualiser import visualise_result
+# Note: visualise_result is imported further down, INSIDE run_f73, and only
+# when visualize=True is actually requested. That way, just importing this
+# file (e.g. from ha2_nn.py) never requires visualiser.py to exist.
 
 
 
@@ -363,6 +364,7 @@ def run_f73(sequence, bin_types, visualize=True, save_path="f73_result.png"):
 
      # VISUALIZATION
     if visualize:  
+        from visualiser import visualise_result  # only needed here, only when actually visualizing
         print_bin_summary(open_bins, items_processed)
         if open_bins:
             print_items_in_bin(open_bins[0], 1)
@@ -473,42 +475,29 @@ def print_items_in_bin(bin_obj, bin_number=None):
 # %%
 
 
-
-
-
-
-
-
-
-
-# %%
-
-
 if __name__ == "__main__":
     os.makedirs("Visuals", exist_ok=True)
-    
-    sequence = load_bed_sequence("bed-bpp_v1.json", order_index=0)
-    
+
+    # Load one order (order_index=0, i.e. the first one) straight from the
+    # raw JSON dataset - no separate loader file needed.
+    with open("../dataset/bed-bpp_v1.json", "r") as f:
+        bed_bpp_data = json.load(f)
+
+    first_order_id = list(bed_bpp_data.keys())[0]
+    order = bed_bpp_data[first_order_id]
+
+    sequence = []
+    for key in sorted(order["item_sequence"].keys(), key=lambda x: int(x)):
+        item = order["item_sequence"][key]
+        sequence.append({
+            "length": item["length/mm"],
+            "width": item["width/mm"],
+            "height": item["height/mm"],
+        })
+
     open_bins, num_bins, total_cost = run_f73(sequence, bin_types, save_path="Visuals/ha2_visualisation.png")
     
     print(f"Bins used: {num_bins}")
     print(f"Total cost: {total_cost}")
 
 # %%
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
