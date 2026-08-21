@@ -1,10 +1,11 @@
 # %%
 """
-XGBoost bin filter for the 3D BPP learnheuristic framework.
+XGBoost bin filter for the 3D BPP learnheuristic framework — F73 (ha2) variant.
 
-Mirrors neural_net.py: same online F53 labelling (median projected util),
-but uses compact tabular features instead of a voxel MLP. Plugs into the
-same filtered_pack_item path in nn_evaluation.py.
+Same online median-projected-utilization labelling as xg_ha1.py, but the
+trajectory is replayed with ha2.pack_item (F73) instead of ha1.pack_item
+(F53), so the bin states / EMS structure candidates trained/labelled here
+come from F73's placement behaviour rather than F53's.
 """
 
 import json
@@ -13,8 +14,7 @@ import joblib
 
 from xgboost import XGBClassifier
 
-import ems_heuristic
-import neural_net
+import ha2
 
 
 # %%
@@ -53,6 +53,33 @@ FEATURE_NAMES = [
     "min_ep_z",
     "mean_ep_z",
 ]
+
+
+# %%
+
+############# STANDALONE GEOMETRY HELPERS #############
+# Helpers for bin and item geometry, free-space structure, and feature extraction.
+
+def bin_volume(bin_obj):
+    return bin_obj.length * bin_obj.width * bin_obj.height
+
+
+def bin_used_volume(bin_obj):
+    total = 0
+    for (xs, ys, zs, xe, ye, ze) in bin_obj.placed_items:
+        total += (xe - xs) * (ye - ys) * (ze - zs)
+    return total
+
+
+def item_fits_in_bin(item_dims, bin_obj):
+    item_l, item_w, item_h = item_dims
+    orientations = ha2.all_orientations(item_l, item_w, item_h)
+    for ems in bin_obj.ems_list:
+        ex, ey, ez, ex_end, ey_end, ez_end = ems
+        for (ol, ow, oh) in orientations:
+            if ha2.fits_in_ems(ol, ow, oh, ex, ey, ez, ex_end, ey_end, ez_end):
+                return True
+    return False
 
 
 # %%
@@ -121,8 +148,8 @@ def extract_features(bin_obj, item_dims):
     bin_l = float(bin_obj.length)
     bin_w = float(bin_obj.width)
     bin_h = float(bin_obj.height)
-    bin_vol = float(neural_net.bin_volume(bin_obj))
-    used = float(neural_net.bin_used_volume(bin_obj))
+    bin_vol = float(bin_volume(bin_obj))
+    used = float(bin_used_volume(bin_obj))
     residual = max(bin_vol - used, 0.0)
     projected_util = (used + item_volume) / bin_vol if bin_vol > 0 else 0.0
     current_util = used / bin_vol if bin_vol > 0 else 0.0
@@ -160,10 +187,10 @@ def extract_features(bin_obj, item_dims):
 
 def build_training_data(sequences, bin_types, max_sequences=None):
     """
-    Same labelling policy as neural_net.build_training_data:
-    among open bins that fit the item, label 1 if projected util >= median.
+    Among open bins that fit the item, label 1 if projected util >= median.
 
-    Trajectory uses F53 pack_item so state evolution matches the NN filter.
+    Trajectory uses F73 (ha2) pack_item, so state evolution matches F73's
+    own placement behaviour rather than F53's.
     Returns (X, y) arrays.
     """
     rows = []
@@ -179,12 +206,12 @@ def build_training_data(sequences, bin_types, max_sequences=None):
 
             candidates = []
             for bin_obj in open_bins:
-                if neural_net.item_fits_in_bin(item_dims, bin_obj):
+                if item_fits_in_bin(item_dims, bin_obj):
                     projected_used = (
-                        neural_net.bin_used_volume(bin_obj) + (item_l * item_w * item_h)
+                        bin_used_volume(bin_obj) + (item_l * item_w * item_h)
                     )
-                    cost_efficiency = projected_used / neural_net.bin_volume(bin_obj)/bin_obj.cost 
-                    candidates.append((bin_obj, cost_efficiency))
+                    utilisation = projected_used / bin_volume(bin_obj)
+                    candidates.append((bin_obj, utilisation))
 
             if candidates:
                 median_util = float(np.median([u for _, u in candidates]))
@@ -192,7 +219,7 @@ def build_training_data(sequences, bin_types, max_sequences=None):
                     rows.append(extract_features(bin_obj, item_dims))
                     labels.append(1.0 if u >= median_util else 0.0)
 
-            ems_heuristic.pack_item(bin_types, open_bins, item_l, item_w, item_h)
+            ha2.pack_item(bin_types, open_bins, item_l, item_w, item_h)
 
     if not rows:
         return np.empty((0, len(FEATURE_NAMES)), dtype=np.float32), np.empty((0,), dtype=np.float32)
@@ -206,7 +233,7 @@ def train_model(
     X,
     y,
     n_estimators=200,
-    max_depth=5,
+    max_depth=5,         ## Check if changing these parameters would improve the performance
     learning_rate=0.08,
     subsample=0.9,
     colsample_bytree=0.9,
@@ -272,6 +299,147 @@ def train_model(
     return model
 
 
+def plot_feature_importance(model, top_n=15, save_path="xgb_feature_importance_ha2.png", show=True):
+    """
+    Plots a horizontal bar chart of the trained model's feature importances
+    (as reported by XGBClassifier.feature_importances_) so you can see which
+    inputs are driving the "good bin" vs "bad bin" decisions.
+
+    top_n     - how many of the most important features to show
+    save_path - where to save the PNG; pass None to skip saving
+    show      - whether to open a plot window (set False on headless/servers)
+
+    Returns the ranked (name, importance) pairs that were plotted.
+    """
+    import matplotlib.pyplot as plt
+
+    importances = model.feature_importances_
+    ranked = sorted(zip(FEATURE_NAMES, importances), key=lambda t: t[1], reverse=True)[:top_n]
+    names, vals = zip(*ranked)
+
+    # reverse so the most important feature is drawn at the top of the chart
+    names = names[::-1]
+    vals = vals[::-1]
+
+    plt.figure(figsize=(8, max(4, 0.35 * len(names))))
+    plt.barh(names, vals, color="#2b6cb0")
+    plt.xlabel("Importance")
+    plt.title(f"XGBoost Feature Importance (top {len(names)})")
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=150)
+        print(f"Feature importance plot saved to {save_path}")
+    if show:
+        plt.show()
+
+    return ranked
+
+
+# %%
+
+############# CLASSIFIER EVALUATION METRICS #############
+# These evaluate the XGB filter itself as a binary classifier (does it
+# correctly predict the median-split "good candidate" label), as opposed to
+# the downstream packing-outcome metrics (bins/cost/utilization) computed in
+# xg_ha2_eval.py. Meant to be run on held-out data, e.g. features/labels
+# built from test_sequences via build_training_data.
+
+def classification_metrics(model, X, y, threshold=0.5):
+    """
+    Returns a dict of accuracy, precision, recall, F1, FPR, FNR, ROC-AUC,
+    and raw confusion-matrix counts (tp/tn/fp/fn) for the given features/labels.
+    """
+    from sklearn.metrics import (
+        confusion_matrix, precision_score, recall_score, f1_score,
+        roc_auc_score, accuracy_score,
+    )
+
+    probs = model.predict_proba(X)[:, 1]
+    preds = (probs >= threshold).astype(int)
+    y_int = y.astype(int)
+
+    tn, fp, fn, tp = confusion_matrix(y_int, preds).ravel()
+
+    return {
+        "threshold": threshold,
+        "n": int(len(y_int)),
+        "accuracy": float(accuracy_score(y_int, preds)),
+        "precision": float(precision_score(y_int, preds, zero_division=0)),
+        "recall": float(recall_score(y_int, preds, zero_division=0)),
+        "f1": float(f1_score(y_int, preds, zero_division=0)),
+        "fpr": float(fp / (fp + tn)) if (fp + tn) > 0 else 0.0,
+        "fnr": float(fn / (fn + tp)) if (fn + tp) > 0 else 0.0,
+        "tp": int(tp), "tn": int(tn), "fp": int(fp), "fn": int(fn),
+        "roc_auc": float(roc_auc_score(y_int, probs)),
+    }
+
+
+def print_classification_metrics(metrics, label="XGB filter"):
+    print(f"\n--- {label}: classifier metrics (threshold={metrics['threshold']}) ---")
+    print(f"  n          : {metrics['n']}")
+    print(f"  Accuracy   : {metrics['accuracy']:.4f}")
+    print(f"  Precision  : {metrics['precision']:.4f}")
+    print(f"  Recall     : {metrics['recall']:.4f}")
+    print(f"  F1         : {metrics['f1']:.4f}")
+    print(f"  FPR        : {metrics['fpr']:.4f}")
+    print(f"  FNR        : {metrics['fnr']:.4f}")
+    print(f"  ROC-AUC    : {metrics['roc_auc']:.4f}")
+    print(f"  Confusion  : TP={metrics['tp']}  TN={metrics['tn']}  FP={metrics['fp']}  FN={metrics['fn']}")
+
+
+def plot_confusion_matrix(model, X, y, threshold=0.5,
+                           save_path="xgb_confusion_matrix_ha2.png", show=True):
+    """Plots and saves a labelled confusion matrix at the given threshold."""
+    from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+    import matplotlib.pyplot as plt
+
+    probs = model.predict_proba(X)[:, 1]
+    preds = (probs >= threshold).astype(int)
+    cm = confusion_matrix(y.astype(int), preds)
+
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["bad (0)", "good (1)"])
+    disp.plot(cmap="Blues", values_format="d")
+    plt.title(f"Confusion Matrix (threshold={threshold})")
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=150)
+        print(f"Confusion matrix saved to {save_path}")
+    if show:
+        plt.show()
+
+    return cm
+
+
+def plot_roc_curve(model, X, y, save_path="xgb_roc_curve_ha2.png", show=True):
+    """Plots and saves the ROC curve, annotated with AUC."""
+    from sklearn.metrics import roc_curve, roc_auc_score
+    import matplotlib.pyplot as plt
+
+    probs = model.predict_proba(X)[:, 1]
+    y_int = y.astype(int)
+    fpr, tpr, thresholds = roc_curve(y_int, probs)
+    auc = roc_auc_score(y_int, probs)
+
+    plt.figure(figsize=(6, 6))
+    plt.plot(fpr, tpr, color="#2b6cb0", label=f"ROC curve (AUC = {auc:.3f})")
+    plt.plot([0, 1], [0, 1], linestyle="--", color="gray", label="Chance")
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title("ROC Curve")
+    plt.legend(loc="lower right")
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=150)
+        print(f"ROC curve saved to {save_path}")
+    if show:
+        plt.show()
+
+    return fpr, tpr, auc
+
+
 # %%
 
 def filter_bins(model, open_bins, item_dims, threshold=0.5):
@@ -289,7 +457,7 @@ def filter_bins(model, open_bins, item_dims, threshold=0.5):
 
 # %%
 
-def save_model(model, path="bin_filter_xgb.joblib"):
+def save_model(model, path="bin_filter_xgb_ha2.joblib"):
     payload = {
         "model": model,
         "feature_names": FEATURE_NAMES,
@@ -302,37 +470,11 @@ def save_model(model, path="bin_filter_xgb.joblib"):
     print(f"Model saved to {path}")
 
 
-def load_model(path="bin_filter_xgb.joblib"):
+def load_model(path="bin_filter_xgb_ha2.joblib"):
     payload = joblib.load(path)
     if isinstance(payload, dict) and "model" in payload:
         return payload["model"]
     return payload
 
-
-# %%
-
-if __name__ == "__main__":
-    import torch
-    from online_generator import bin_types
-
-    dataset = torch.load("online_dataset.pt", weights_only=False)
-    sequences = dataset["sequences"]
-
-    print("Building XGB training data (subset of sequences)...")
-    X, y = build_training_data(sequences, bin_types, max_sequences=20)
-    print(f"Generated {len(X)} samples  |  positive rate={y.mean():.3f}" if len(y) else "No samples")
-
-    if len(X):
-        model = train_model(X, y)
-        save_model(model, "bin_filter_xgb.joblib")
-
-        # Feature importance snapshot
-        importances = model.feature_importances_
-        ranked = sorted(zip(FEATURE_NAMES, importances), key=lambda t: t[1], reverse=True)
-        print("\nTop features:")
-        for name, imp in ranked[:10]:
-            print(f"  {name:24s}  {imp:.4f}")
-    else:
-        print("No training samples generated; check sequences / multi-bin scenarios.")
 
 # %%

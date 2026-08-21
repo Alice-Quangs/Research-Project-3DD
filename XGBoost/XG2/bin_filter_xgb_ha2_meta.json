@@ -1,0 +1,32 @@
+{
+  "feature_names": [
+    "item_l",
+    "item_w",
+    "item_h",
+    "item_volume",
+    "item_max_dim",
+    "item_min_dim",
+    "item_aspect_ratio",
+    "bin_l",
+    "bin_w",
+    "bin_h",
+    "bin_volume",
+    "bin_cost",
+    "bin_cost_per_volume",
+    "used_volume",
+    "residual_volume",
+    "current_util",
+    "projected_util",
+    "item_to_bin_vol_ratio",
+    "num_items",
+    "num_ems",
+    "max_ems_volume",
+    "mean_ems_volume",
+    "max_ems_dim",
+    "supportable_ems_count",
+    "num_eps",
+    "min_ep_z",
+    "mean_ep_z"
+  ],
+  "n_features": 27
+}
