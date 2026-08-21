@@ -3,13 +3,11 @@
 # This one script does the whole HA1 (F53 / EMS heuristic) machine learning
 # job, start to finish:
 #
-#   1. Build training data straight from the raw BED-BPP dataset (no
-#      separate "generate data" file needed).
+#   1. Build training data straight from the raw BED-BPP dataset.
 #   2. Train a small neural network (an MLP - Multi Layer Perceptron) to
-#      predict Fit / No-Fit, using a grid search + 5-fold cross-validation,
-#      the same way the dissertation did it.
+#      predict Fit / No-Fit, using a grid search + 5-fold cross-validation.
 #   3. Work out the best decision threshold for the NN using a threshold
-#      sweep (this is what the ROC curve is built from).
+#      sweep (ROC curve).
 #   4. Run the plain HA1 heuristic on the whole dataset (the "baseline").
 #   5. Run HA1 again, but this time the NN gets to reject bad-looking bins
 #      before the heuristic bothers checking their geometry (the
@@ -18,9 +16,7 @@
 # Every result gets saved as a .csv file into a "Results" folder (created
 # automatically). analyze.py then reads those .csv files and turns them
 # into plots. This script does NOT make any plots itself.
-#
-# This script does not change ha1.py or bin_types.py at all - it only
-# imports functions from them.
+
 
 import os
 import json
@@ -52,12 +48,10 @@ from ha1 import (
 
 
 # ============================================================
-#  SETTINGS - everything you might want to tweak lives here
+#  SETTINGS 
 # ============================================================
 
-# Where the raw dataset lives. Change this one line if your folder layout
-# is different - the rest of the script doesn't care.
-DATA_PATH = "../dataset/bed-bpp_v1.json"
+DATA_PATH = "../dataset/bed-bpp_v1.json" # the data lives here
 
 RESULTS_FOLDER = "Results"
 
@@ -67,10 +61,10 @@ RANDOM_STATE = 42          # fixed seed so results are repeatable
 # the FULL dataset (potentially tens of millions of rows) would take an
 # extremely long time. So the grid search itself runs on a smaller,
 # stratified sample. Once we know the best hyperparameters, we train the
-# FINAL model on the full dataset, as requested.
+# FINAL model on the full dataset.
 GRID_SEARCH_SAMPLE_SIZE = 300_000
 
-# Same size/decay grid as Table 3 in the dissertation.
+# size/decay grid.
 PARAM_GRID = {
     "mlp__hidden_layer_sizes": [(1,), (3,), (5,), (7,), (9,)],
     "mlp__alpha": [0.0, 0.0001, 0.001, 0.01],
@@ -333,13 +327,13 @@ def train_neural_network(df):
     pipeline = Pipeline([
         ("scaler", StandardScaler()),
         ("mlp", MLPClassifier(
-            activation="logistic",   # sigmoid activation, matches the dissertation
-            solver="lbfgs",          # a BFGS-family optimiser, matches the dissertation's
+            activation="logistic",   # sigmoid activation
+            solver="lbfgs",          # a BFGS-family optimiser,
                                       # methodology (R's nnet also optimises this way by
                                       # default). Backpropagation is still what computes the
                                       # gradients that this optimiser uses at every step -
                                       # sklearn does that internally regardless of solver.
-            max_iter=300,            # matches the dissertation's iteration cap
+            max_iter=300,            #  iteration cap
             random_state=RANDOM_STATE,
         )),
     ])
@@ -375,7 +369,7 @@ def train_neural_network(df):
     print(f"Saved: {grid_path}")
     print(f"Best hyperparameters found: {grid.best_params_}")
 
-    # --- Fit the FINAL model on the FULL training set ---
+    # Fit the FINAL model on the FULL training set
     best_size = grid.best_params_["mlp__hidden_layer_sizes"]
     best_decay = grid.best_params_["mlp__alpha"]
 
@@ -397,7 +391,7 @@ def train_neural_network(df):
     fit_time = time.perf_counter() - fit_start
     print(f"Final model trained in {fit_time:.1f}s ({fit_time / 60:.2f} min)")
 
-    # --- Evaluate on the held-out test set ---
+    # Evaluate on the held-out test set
     y_pred = final_model.predict(X_test)
     test_accuracy = accuracy_score(y_test, y_pred)
     test_kappa = cohen_kappa_score(y_test, y_pred)
@@ -418,7 +412,7 @@ def train_neural_network(df):
         "importance_mean": perm_result.importances_mean,
         "importance_std": perm_result.importances_std,
     }).sort_values("importance_mean", ascending=False)
-    # scaled 0-100, same style as the dissertation's importance plots
+    # scaled 0-100
     importance_df["importance_scaled"] = (
         importance_df["importance_mean"] / importance_df["importance_mean"].max() * 100
     )
@@ -426,7 +420,7 @@ def train_neural_network(df):
     importance_df.to_csv(importance_path, index=False)
     print(f"Saved: {importance_path}")
 
-    # --- ROC curve data ---
+    # ROC curve data 
     fit_class_index = list(final_model.classes_).index(1)
     test_probs = final_model.predict_proba(X_test)[:, fit_class_index]
 
@@ -701,7 +695,7 @@ def run_nn_filtered(dataset, model, threshold):
 
 
 # ============================================================
-#  MAIN - run every stage in order
+#  MAIN 
 # ============================================================
 
 def main():

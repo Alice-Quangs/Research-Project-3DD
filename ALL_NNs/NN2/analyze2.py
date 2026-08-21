@@ -31,7 +31,7 @@ NN_FILTER_COLOR = "#DD8452"   # orange
 
 
 # ============================================================
-#  MAKE SURE THE RESULTS FILES ACTUALLY EXIST
+#  MAKING SURE THE RESULTS FILES ACTUALLY EXIST
 # ============================================================
 
 REQUIRED_RESULTS_FILES = [
@@ -84,7 +84,7 @@ def load_results():
 # ============================================================
 #
 # One line per decay value, showing how accuracy/kappa changed as the
-# hidden layer size grew - same style as Figure 10 in the dissertation.
+# hidden layer size grew 
 
 def plot_hyperparameter_tuning(grid_df):
     print("Plotting hyperparameter tuning results...")
@@ -149,7 +149,7 @@ def plot_roc_and_threshold(roc_df, sweep_df, confusion_df):
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
 
-    # --- Panel 1: ROC curve ---
+    # Panel 1: ROC curve 
     axes[0].plot(roc_df["fpr"], roc_df["tpr"], color=BASELINE_COLOR, label=f"ROC (AUC = {roc_auc:.3f})")
     axes[0].plot([0, 1], [0, 1], linestyle="--", color="gray", label="Random guess")
 
@@ -163,7 +163,7 @@ def plot_roc_and_threshold(roc_df, sweep_df, confusion_df):
     axes[0].set_ylabel("True Positive Rate")
     axes[0].legend(fontsize=8)
 
-    # --- Panel 2: how the threshold was chosen (Youden's J across thresholds) ---
+    # Panel 2: how the threshold was chosen (Youden's J across thresholds) 
     axes[1].plot(sweep_df["threshold"], sweep_df["youden_j"], color=BASELINE_COLOR, label="Youden's J (TPR - FPR)")
     axes[1].axvline(chosen_threshold, color=NN_FILTER_COLOR, linestyle="--",
                      label=f"Chosen threshold = {chosen_threshold:.2f}")
