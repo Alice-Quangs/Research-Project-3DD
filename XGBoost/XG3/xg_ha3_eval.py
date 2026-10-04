@@ -265,32 +265,49 @@ def print_sample_size_sweep(sweep_results, label="EP"):
 def plot_sample_size_sweep(sweep_results, label="EP",
                             save_path="ep_sample_size_sweep.png", show=True):
     """
-    Plots utilization, bins used, residual capacity, and runtime against
-    sample size (n_sequences), baseline vs XGB-filtered, as four small
-    subplots in one figure.
+    Utilization stays a line (its range is too narrow for bars to read).
+    Bins used, bin cost, and residual capacity are grouped bars,
+    baseline vs XGB-filtered, at each sample size.
     """
     import matplotlib.pyplot as plt
+    import numpy as np
 
     ns = [row["n_sequences"] for row in sweep_results]
     base = [row["baseline"] for row in sweep_results]
     filt = [row["with_filter"] for row in sweep_results]
 
+    x = np.arange(len(ns))
+    width = 0.35
+
     fig, axes = plt.subplots(2, 2, figsize=(11, 8))
 
-    def _plot(ax, key, ylabel, title, scale=1.0):
-        ax.plot(ns, [b[key] * scale for b in base], marker="o", label="Baseline")
-        ax.plot(ns, [f[key] * scale for f in filt], marker="o", label="With XGB")
+    # --- Utilization: keep as a line, its range is too narrow for bars ---
+    ax = axes[0, 0]
+    ax.plot(ns, [b["avg_utilization"] for b in base], marker="o", label="Baseline")
+    ax.plot(ns, [f["avg_utilization"] for f in filt], marker="o", label="With XGB")
+    ax.set_xlabel("Number of test sequences")
+    ax.set_ylabel("Avg utilization")
+    ax.set_title("Utilization vs sample size")
+    ax.legend()
+
+    def _bar(ax, key, ylabel, title, scale=1.0):
+        base_vals = [b[key] * scale for b in base]
+        filt_vals = [f[key] * scale for f in filt]
+        ax.bar(x - width / 2, base_vals, width, label="Baseline")
+        ax.bar(x + width / 2, filt_vals, width, label="With XGB")
+        ax.set_xticks(x)
+        ax.set_xticklabels(ns)
         ax.set_xlabel("Number of test sequences")
         ax.set_ylabel(ylabel)
         ax.set_title(title)
         ax.legend()
 
-    _plot(axes[0, 0], "avg_utilization", "Avg utilization", "Utilization vs sample size")
-    _plot(axes[0, 1], "total_bins", "Total bins used", "Bins used vs sample size")
+    _bar(axes[0, 1], "total_bins", "Total bins used", "Bins used vs sample size")
     # residual capacity is stored in mm^3 (bed-bpp item dims are in mm) -> litres for readability
-    _plot(axes[1, 0], "total_residual_capacity", "Total residual capacity (L)",
-          "Residual capacity vs sample size", scale=1e-6)
-    _plot(axes[1, 1], "total_time", "Time (s)", "Runtime vs sample size")
+    _bar(axes[1, 0], "total_residual_capacity", "Total residual capacity (L)",
+         "Residual capacity vs sample size", scale=1e-6)
+    # swapped out runtime (not performing as expected) for bin cost
+    _bar(axes[1, 1], "total_cost", "Total bin cost", "Bin cost vs sample size")
 
     fig.suptitle(f"{label}: Sample-size sweep")
     fig.tight_layout()
