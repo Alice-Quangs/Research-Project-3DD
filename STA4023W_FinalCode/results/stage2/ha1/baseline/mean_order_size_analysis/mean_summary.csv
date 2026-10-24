@@ -1,0 +1,2 @@
+method,runtime_s_mean,runtime_s_std,runtime_s_min,runtime_s_max,cost_mean,cost_std,cost_min,cost_max,bins_mean,bins_std,bins_min,bins_max,utilisation_pct_mean,utilisation_pct_std,utilisation_pct_min,utilisation_pct_max,speedup_vs_baseline,cost_change_pct
+baseline,5.49092368570348,0.8739442367472608,4.722904199385005,6.7104658003662845,6768966.0,0.0,6768966,6768966,36941.0,0.0,36941,36941,55.20077610319642,0.0,55.20077610319642,55.20077610319642,1.0,0.0

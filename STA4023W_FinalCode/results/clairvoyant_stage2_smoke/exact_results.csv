@@ -1,0 +1,2 @@
+order_id,subset_size,time_limit_seconds,previous_optimal_cost,solver_status,is_optimal,incumbent_cost,best_bound,solver_gap_pct,exact_time_seconds,candidate_bins,variables,constraints
+00104784,5,60,375.0,OPTIMAL,True,375.0,375.0,0.0,0.6327288001775742,5,375,1072

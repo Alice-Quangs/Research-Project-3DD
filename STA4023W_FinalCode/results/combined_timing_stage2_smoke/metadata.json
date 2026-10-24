@@ -1,0 +1,75 @@
+{
+  "experiment": "combined_timing_stage2",
+  "instrumentation_enabled": false,
+  "repetitions": 1,
+  "heuristics": [
+    "ha1",
+    "ha2",
+    "ha3"
+  ],
+  "min_bins": [
+    1,
+    40
+  ],
+  "instance_ids": [
+    "combined_100_0000",
+    "combined_200_0000",
+    "combined_400_0000",
+    "combined_800_0000"
+  ],
+  "manifest_sha256": "6f5fa23332052b730fb9fb4e0e41f93945e01f4efa8a63366681a786f6ac7d7b",
+  "dataset_sha256": "6ecc91d92b9ce88de113ac66c45a450ac3eec303018f14cd73e4bd0eaf8eb3cc",
+  "original_combined_fingerprint": "0dfa46d209415c3400328e3be7472cb23c9deaad1cddf60f0654d8ef2c2e0440",
+  "heuristic_hashes": {
+    "ha1": "d959c22bef13882e2066744aa167f8f0564e4d190cc0904dbffbee2116394428",
+    "ha2": "0f784983d8d32e1a41b621401b492d7017df3eca93bcf815f5fb75f0870a1e36",
+    "ha3": "27ea6bedb08dc97f83043d002b1b6ded4c10096e533f5d25fa39e870037dd7f9"
+  },
+  "source_hashes": {
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\run_combined_timing_stage2.py": "07dc072720d330f048bf8ca2d518e73f134e076f4bf316c95e682d10c6f708fb",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\filtering.py": "d485998c9d1a0c90e473f136828dabccb34b0cb210936092da58bcbd485babc8",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\features.py": "9f9751a1caebce30dba37a46dcc4cd47e9797c6958f81f567d89f769c2327d29",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\bin_types.py": "a4b137a485056cc10782147a014132441ec51da1b3bdb660ac4c96a60b979f6f",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\config.py": "fd5c1ec53617b61ab305badefab714b3cfc7ecbd5adbb3adf264b6e5c735d81e",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\data_loader.py": "6ad3ac5a44bda30b52aef1eeb0fd5d66d200edd12a5d803f082748064714116f",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\splits.py": "d834656e4856dd9b83e7616c4b0d9d9e89d10d7448f74cc5417b2e94916dd9cd",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\xgb_model\\predictor.py": "c6a71bba0286f432508a354c4ca27f942213806f2cacb0e696d265b73dd88e3f",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\neural_network\\predictor.py": "1704cf6e0aa5d35e147964459f57ace6e815d9f3284dc5b50bf37e3bca5b6046"
+  },
+  "models": {
+    "ha1/neural_network": {
+      "sha256": "d696841c51937a4c2e211d47a640a52717c4b35765d1a47d0cd9b789dd30400e",
+      "threshold": 0.3,
+      "cache_enabled": true
+    },
+    "ha1/xgboost": {
+      "sha256": "2355b82ffd539cd7287e12fd58bbf3c574a968bcf2ea3681b30f6f5ea7a9578d",
+      "threshold": 0.51,
+      "cache_enabled": true
+    },
+    "ha2/neural_network": {
+      "sha256": "28d34c632cf38eb249fe1265bd478d41c3ee5b5898edb0413d71338fafbfee37",
+      "threshold": 0.29,
+      "cache_enabled": true
+    },
+    "ha2/xgboost": {
+      "sha256": "0721217e2c48d4c18096d0c2efa61c79bf4d02885ee2bcabc42db1e86a3bee54",
+      "threshold": 0.51,
+      "cache_enabled": true
+    },
+    "ha3/neural_network": {
+      "sha256": "91aea70d391925b21cda1653dee68ed6457958a70dbe64f6fed59d8612a02406",
+      "threshold": 0.15,
+      "cache_enabled": true
+    },
+    "ha3/xgboost": {
+      "sha256": "9aded21dea0cd94356c2d16945ccc3a80fe4be22f9e629d31d5cf5346322b379",
+      "threshold": 0.34,
+      "cache_enabled": true
+    }
+  },
+  "python": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "timing": "Uninstrumented packing loop; model loading, reporting and final geometry validation excluded.",
+  "test_streams": "Diagnostic sensitivity comparison only; not a new threshold-selection sweep."
+}

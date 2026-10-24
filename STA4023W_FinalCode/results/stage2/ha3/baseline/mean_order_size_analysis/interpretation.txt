@@ -1,0 +1,7 @@
+Speedup > 1 means faster than baseline. Band intervals resample paired orders.
+A single faster band is not evidence of a persistent crossover.
+Inspect counts, neighbouring bands, packing quality and filter activity.
+No extrapolation beyond the observed order sizes is justified.
+Repeated timing rows are averaged within order before size analysis.
+Model loading, cache policy and timing scope are inherited from benchmark.py.
+Order size is a proxy for candidate-search work; it does not prove causation.

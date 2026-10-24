@@ -1,0 +1,96 @@
+hidden_units,alpha,validation_average_precision,fit_seconds,iterations,loss,convergence_warning,warnings
+1,0.0,0.6717245176176623,112.0086936999578,359,0.25647170642143874,False,
+1,0.0001,0.6717246240911471,100.30683970008977,328,0.2564385909851833,False,
+1,0.001,0.6721262457120728,76.44687009998597,252,0.2564634243552691,False,
+1,0.01,0.6715931171297153,76.59789430000819,250,0.25663986876387584,False,
+3,0.0,0.8420843435089614,541.4425653999206,1000,0.18641968592898722,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+3,0.0001,0.8413544140658497,542.5210191999795,1000,0.18645190808216372,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+3,0.001,0.8424679079071796,536.9216710999608,1000,0.1866216075804665,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+3,0.01,0.8431185545797762,542.5734691999387,1000,0.18673740133359817,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+5,0.0,0.878285076539836,710.5517514999956,1000,0.14689773015037638,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+5,0.0001,0.8829354479202899,698.169331299956,1000,0.1465083982337429,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+5,0.001,0.8795460764755781,699.301077799988,1000,0.14626459503410452,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+5,0.01,0.8687613012895271,348.9582593999803,500,0.15787814550977722,False,
+7,0.0,0.9084023470708733,869.4854740999872,1000,0.12161423477042739,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+7,0.0001,0.9104022826583864,835.5447085000342,1000,0.12293406934384823,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+7,0.001,0.9112890006541352,897.1770633000415,1000,0.12184055614503314,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+7,0.01,0.9084500063860177,858.4378301000688,1000,0.12309356169901482,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+9,0.0,0.9131842507166983,1432.2258630000288,1000,0.12182237010126881,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+9,0.0001,0.9182549313496163,1048.877554900013,1000,0.12174506495212425,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+9,0.001,0.9133384494590799,1019.8603197999764,1000,0.12678057515980135,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+9,0.01,0.917514281175058,1001.1733831999591,1000,0.12159166457351538,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"

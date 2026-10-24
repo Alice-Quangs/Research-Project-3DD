@@ -1,0 +1,61 @@
+hidden_units,alpha,validation_average_precision,fit_seconds,iterations,loss,convergence_warning,warnings
+1,0.0,0.647814128440389,73.53806279995479,227,0.2849421472032755,False,
+1,0.0001,0.648183636346408,100.43178340001032,312,0.28489262286953715,False,
+1,0.001,0.648113702192556,96.14315129991155,293,0.2848315033735424,False,
+1,0.01,0.6481875831162404,124.48247690009885,382,0.2848555404706856,False,
+3,0.0,0.7750020278939396,532.8056124999421,889,0.22764212658129335,False,
+3,0.0001,0.7748224241633164,420.8361574000446,697,0.22807591140613254,False,
+3,0.001,0.7729138659465792,463.82908110006247,773,0.22770338396720158,False,
+3,0.01,0.7751194976038189,425.805908099981,708,0.2281269187413455,False,
+5,0.0,0.8425441307200388,420.4311526999809,553,0.1807670856263667,False,
+5,0.0001,0.8459290676766226,413.57805579993874,543,0.18125431992928878,False,
+5,0.001,0.8463165246045478,680.5694517000811,882,0.17810520763744944,False,
+5,0.01,0.8430412730103357,464.039145299932,600,0.1806119243111936,False,
+7,0.0,0.9047599477256256,928.768057600013,1000,0.14093822454699811,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+7,0.0001,0.9050185083322156,899.7452687999466,1000,0.13861941788453805,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+7,0.001,0.9020315329345724,920.621624100022,1000,0.14149092655964804,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+7,0.01,0.9057773858124316,914.7772660000483,1000,0.13970281907035476,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+9,0.0,0.9058051846226551,1046.7403175999643,1000,0.1337011490107967,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+9,0.0001,0.8907979196519801,1049.07760780002,1000,0.14112049430570264,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+9,0.001,0.8905485894277304,1053.177222999977,1000,0.14133679783038247,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"
+9,0.01,0.8916790660119048,1051.3023614999838,1000,0.14080506801702256,True,"lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html"

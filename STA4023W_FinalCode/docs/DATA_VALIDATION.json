@@ -1,0 +1,22 @@
+{
+  "orders": 10003,
+  "split_counts": {
+    "train": 6402,
+    "validation": 1600,
+    "test": 2001
+  },
+  "test_items": 86400,
+  "combined_streams_verified": 120,
+  "split_hash_records_verified": [
+    "results/stage2/ha1/test/metadata.json",
+    "results/stage2/ha2/test/metadata.json",
+    "results/stage2/ha3/test/metadata.json",
+    "models/ha1/neural_network/metadata.json",
+    "models/ha1/xgb_model/metadata.json",
+    "models/ha2/neural_network/metadata.json",
+    "models/ha2/xgb_model/metadata.json",
+    "models/ha3/neural_network/metadata.json",
+    "models/ha3/xgb_model/metadata.json"
+  ],
+  "raw_sha256_matches_overnight": true
+}

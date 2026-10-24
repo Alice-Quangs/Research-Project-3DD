@@ -1,0 +1,47 @@
+[
+  {
+    "method": "baseline",
+    "min_bins": null,
+    "threshold": null,
+    "repetitions": 3,
+    "median_runtime_s": 6.490754297468811,
+    "min_runtime_s": 6.400262200389989,
+    "max_runtime_s": 6.541589200613089,
+    "median_cost": 8980373,
+    "median_bins": 49071,
+    "median_utilisation": 0.523111353400065,
+    "packing_totals_consistent": true,
+    "speedup_vs_baseline": 1.0,
+    "cost_change_pct_vs_baseline": 0.0
+  },
+  {
+    "method": "xgboost",
+    "min_bins": 40,
+    "threshold": 0.46,
+    "repetitions": 3,
+    "median_runtime_s": 6.798775503179058,
+    "min_runtime_s": 6.564430997008458,
+    "max_runtime_s": 6.92302400036715,
+    "median_cost": 8980373,
+    "median_bins": 49071,
+    "median_utilisation": 0.523111353400065,
+    "packing_totals_consistent": true,
+    "speedup_vs_baseline": 0.954694605585047,
+    "cost_change_pct_vs_baseline": 0.0
+  },
+  {
+    "method": "neural_network",
+    "min_bins": 40,
+    "threshold": 0.2,
+    "repetitions": 3,
+    "median_runtime_s": 6.948939398629591,
+    "min_runtime_s": 6.5665259988745674,
+    "max_runtime_s": 7.559069999260828,
+    "median_cost": 8980373,
+    "median_bins": 49071,
+    "median_utilisation": 0.523111353400065,
+    "packing_totals_consistent": true,
+    "speedup_vs_baseline": 0.9340640240363675,
+    "cost_change_pct_vs_baseline": 0.0
+  }
+]

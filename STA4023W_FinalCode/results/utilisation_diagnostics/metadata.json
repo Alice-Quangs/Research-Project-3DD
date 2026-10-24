@@ -1,0 +1,49 @@
+{
+  "partition": "test",
+  "orders": 2001,
+  "partial_run": false,
+  "bin_catalogue": [
+    {
+      "name": "small",
+      "length": 462,
+      "width": 304,
+      "height": 546,
+      "cost": 143,
+      "max_weight": 22
+    },
+    {
+      "name": "medium",
+      "length": 745,
+      "width": 325,
+      "height": 399,
+      "cost": 232,
+      "max_weight": 14
+    },
+    {
+      "name": "large",
+      "length": 635,
+      "width": 441,
+      "height": 413,
+      "cost": 317,
+      "max_weight": 26
+    },
+    {
+      "name": "extra_large",
+      "length": 509,
+      "width": 420,
+      "height": 1260,
+      "cost": 1000,
+      "max_weight": 15
+    }
+  ],
+  "checks": "orthogonal dimensions, containment, non-overlap, item count, cached volume, reference totals",
+  "excluded_checks": "weight, stability, blocking; not enforced by these baseline heuristics",
+  "source_sha256": {
+    "ha1": "d959c22bef13882e2066744aa167f8f0564e4d190cc0904dbffbee2116394428",
+    "ha2": "0f784983d8d32e1a41b621401b492d7017df3eca93bcf815f5fb75f0870a1e36",
+    "ha3": "27ea6bedb08dc97f83043d002b1b6ded4c10096e533f5d25fa39e870037dd7f9",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\data\\raw\\bed-bpp_v1.json": "6ecc91d92b9ce88de113ac66c45a450ac3eec303018f14cd73e4bd0eaf8eb3cc",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\data\\splits\\order_splits.json": "cc17a1339a5a6fcb6e979acb14cfc7d5dffb18d172accde3f4e316a13942ab6e",
+    "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\bin_types.py": "a4b137a485056cc10782147a014132441ec51da1b3bdb660ac4c96a60b979f6f"
+  }
+}

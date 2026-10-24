@@ -1,0 +1,171 @@
+{
+  "heuristic": "ha3",
+  "mode": "validation",
+  "partition": "validation",
+  "repetitions": 7,
+  "min_bins": [
+    1,
+    10,
+    20,
+    30,
+    40
+  ],
+  "models": {
+    "xgboost": {
+      "path": "models\\ha3\\xgb_model\\model.joblib",
+      "sha256": "9aded21dea0cd94356c2d16945ccc3a80fe4be22f9e629d31d5cf5346322b379",
+      "threshold": 0.34
+    },
+    "neural_network": {
+      "path": "models\\ha3\\neural_network\\model.joblib",
+      "sha256": "91aea70d391925b21cda1653dee68ed6457958a70dbe64f6fed59d8612a02406",
+      "threshold": 0.15
+    }
+  },
+  "seed": 2026,
+  "bin_catalogue": [
+    {
+      "name": "small",
+      "length": 462,
+      "width": 304,
+      "height": 546,
+      "cost": 143,
+      "max_weight": 22
+    },
+    {
+      "name": "medium",
+      "length": 745,
+      "width": 325,
+      "height": 399,
+      "cost": 232,
+      "max_weight": 14
+    },
+    {
+      "name": "large",
+      "length": 635,
+      "width": 441,
+      "height": 413,
+      "cost": 317,
+      "max_weight": 26
+    },
+    {
+      "name": "extra_large",
+      "length": 509,
+      "width": 420,
+      "height": 1260,
+      "cost": 1000,
+      "max_weight": 15
+    }
+  ],
+  "orders_fingerprint": "58c782f1bdb3c4e6715511de782790a9d5ee8c6e8acaf9cf5da45602c5e0d0f9",
+  "split_sha256": "cc17a1339a5a6fcb6e979acb14cfc7d5dffb18d172accde3f4e316a13942ab6e",
+  "heuristic_sha256": "27ea6bedb08dc97f83043d002b1b6ded4c10096e533f5d25fa39e870037dd7f9",
+  "python": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]",
+  "config": {
+    "heuristic": "ha1",
+    "paths": {
+      "root": "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main",
+      "raw_dataset": "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\data\\raw\\bed-bpp_v1.json",
+      "split_manifest": "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\data\\splits\\order_splits.json",
+      "processed_dir": "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\data\\processed",
+      "models_dir": "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\models",
+      "results_dir": "C:\\Users\\DR JOHN\\OneDrive - University of Cape Town\\Honours Year\\Models - Research\\Main\\results"
+    },
+    "data": {
+      "random_seed": 42,
+      "train_fraction": 0.64,
+      "validation_fraction": 0.16,
+      "test_fraction": 0.2,
+      "split_unit": "order",
+      "arrival_order": "dataset_sequence",
+      "logging_policy": "all_open_bins_before_placement",
+      "include_new_bin_rows": false,
+      "target_column": "fit",
+      "positive_label": 1,
+      "negative_label": 0,
+      "label_definition": "heuristic_finds_feasible_placement",
+      "metadata_columns": [
+        "order_id",
+        "item_index",
+        "bin_index"
+      ]
+    },
+    "class_weights": {
+      "policy": "scale_weighted",
+      "negative_weight": 1.0,
+      "positive_weight_rule": "n_negative_divided_by_n_positive",
+      "undersample": false
+    },
+    "filtering": {
+      "min_bins_candidates": [
+        1,
+        10,
+        20,
+        30,
+        40
+      ],
+      "selected_min_bins": null,
+      "activation_rule": "open_bin_count_greater_than_or_equal_to_min_bins",
+      "fallback_policy": "restore_all_open_bins_if_shortlist_empty",
+      "preserve_candidate_order": true,
+      "retry_rejected_after_nonempty_shortlist_fails": false
+    },
+    "thresholds": {
+      "selection_method": "highest_threshold_meeting_recall_target",
+      "target_recall": 0.99,
+      "grid_min": 0.0,
+      "grid_max": 1.0,
+      "grid_step": 0.01,
+      "selection_partition": "validation"
+    },
+    "models": {
+      "model_names": [
+        "xgboost",
+        "neural_network"
+      ],
+      "nn_standardise_inputs": true,
+      "xgb_standardise_inputs": false,
+      "nn_weight_argument": "sample_weight",
+      "xgb_weight_argument": "scale_pos_weight",
+      "require_weighting_support": true
+    },
+    "benchmark": {
+      "partition": "test",
+      "methods": [
+        "baseline",
+        "xgboost",
+        "neural_network"
+      ],
+      "repetitions": 3,
+      "include_feature_extraction_in_runtime": true,
+      "include_placement_and_bin_updates_in_runtime": true,
+      "include_model_loading_in_runtime": false,
+      "probability_cache_enabled": true,
+      "validate_fast_predictions": true
+    },
+    "feature_schema_version": "shared_v1",
+    "feature_names": [
+      "item_length",
+      "item_width",
+      "item_height",
+      "item_volume",
+      "item_aspect_ratio",
+      "bin_length",
+      "bin_width",
+      "bin_height",
+      "residual_volume",
+      "current_utilisation",
+      "projected_utilisation",
+      "item_to_bin_volume_ratio",
+      "ems_count",
+      "max_ems_volume",
+      "min_ems_volume",
+      "mean_ems_volume",
+      "max_ems_length",
+      "max_ems_width",
+      "max_ems_height"
+    ]
+  },
+  "timing": "Inherited benchmark cold-start packing-loop timing; loading/reporting excluded.",
+  "synthetic_sources_reused_across_instances": false
+}
